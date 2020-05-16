@@ -1,29 +1,16 @@
-import requests
-import json
+import http.client
 
-def jprint(obj):
-    # create a formatted string of the Python JSON object
-    for item in obj['region']:
-        print(item['region'])
-    text = json.dumps(obj, sort_keys=True, indent=4)
-    print(text)
+conn = http.client.HTTPSConnection("morningstar1.p.rapidapi.com")
 
-apiKey = '1AEF9PXLWXI8NDQ2'
-dataType = 'json'
-symbol = 'BA'
-response = requests.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +
-                        symbol + "&apikey=" + apiKey +"&datatype=" + dataType)
-#print(response.json())
+headers = {
+    'x-rapidapi-host': "morningstar1.p.rapidapi.com",
+    'x-rapidapi-key': "d54890ff34msh82b8e33167565a7p1e9232jsn0206c3837c0e",
+    'accept': "string"
+    }
 
-obj = response.json()
+conn.request("GET", "/convenient/fundamentals/yearly/restated?Mic=XNAS&Ticker=MSFT", headers=headers)
 
-print("price: " + str(obj['Global Quote']['05. price']))
+res = conn.getresponse()
+data = res.read()
 
-'''
-print("current price:" + str(obj['us']['current_price']))
-print("30 day low:" + str(obj['us']['30_day_low']))
-print("30 day high:" + str(obj['us']['30_day_high']))
-'''
-
-
-#jprint(response.json())
+print(data.decode("utf-8"))
